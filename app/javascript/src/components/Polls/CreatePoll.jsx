@@ -7,12 +7,12 @@ import pollsApi from "apis/polls";
 import { getFromLocalStorage } from "helpers/storage";
 
 const CreatePoll = ({ history }) => {
-  const [title, setTitle] = useState("Best OS for ROR development");
+  const [title, setTitle] = useState("");
   const [options, setOptions] = useState([
-    { option: "Mac" },
-    { option: "Ubuntu" },
-    { option: "Windows" },
-    { option: "Debian" },
+    { option: "" },
+    { option: "" },
+    { option: "" },
+    { option: "" },
   ]);
   const [loading, setLoading] = useState(true);
   const authToken = getFromLocalStorage("authToken");

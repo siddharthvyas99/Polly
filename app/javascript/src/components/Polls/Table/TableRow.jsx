@@ -1,8 +1,10 @@
 import React from "react";
 import classnames from "classnames";
 import PropTypes from "prop-types";
+import { getFromLocalStorage } from "helpers/storage";
 
 const TableRow = ({ data, destroyPoll, updatePoll, showPoll, isLoggedIn }) => {
+  const authUserId = getFromLocalStorage("authUserId");
   return (
     <tbody className="bg-white divide-y divide-gray-200">
       {data.map(rowData => (
@@ -19,20 +21,19 @@ const TableRow = ({ data, destroyPoll, updatePoll, showPoll, isLoggedIn }) => {
           >
             {rowData.title}
           </td>
-          {isLoggedIn && (
+          {isLoggedIn && authUserId === rowData.creator_id && (
             <>
               <td style={{ width: "164px" }}></td>
               <td className="px-6 py-4 text-center cursor-pointer">
                 <i
                   className="text-2xl text-center text-bb-border
-                  transition duration-300 ease-in-out ri-draft
-                  ri-draft-5-line hover:text-bb-red"
+                  transition duration-300 ease-in-out ri-edit-box-line hover:text-bb-red"
                   onClick={() => updatePoll(rowData.id)}
                 ></i>
               </td>
             </>
           )}
-          {isLoggedIn && (
+          {isLoggedIn && authUserId === rowData.creator_id && (
             <>
               <td style={{ width: "164px" }}></td>
               <td className="px-6 py-4 text-center cursor-pointer">

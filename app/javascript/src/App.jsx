@@ -47,7 +47,7 @@ const App = () => {
         <Route exact path="/login" component={Login} />
         <Route exact path="/polls/:id/show" component={ShowPoll} />
         <Route exact path="/polls/:id/edit" component={EditPoll} />
-        <Route exact path="/polls/new" component={CreatePoll} />
+        <Route exact path="/polls/create" component={CreatePoll} />
         <Route exact path="/" component={Dashboard} />
       </Switch>
     </Router>
