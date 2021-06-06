@@ -10,21 +10,7 @@ class PollsController < ApplicationController
     render status: :ok, json: { polls: polls }
   end
   
-  def show
-    render status: :ok, json: { poll: @poll.as_json(include: {
-        poll_options: {
-          only: [:option, :id, :vote]
-        }
-      })
-    }
-    # authorize @poll
-    # poll_options = @poll.poll_options
-    # poll_creator = User.find(@poll.creator_id).name
-    # render status: :ok, json: { poll: @poll, poll_options: poll_options, poll_creator: poll_creator }
-  end
-  
   def create
-    logger.info poll_params
     @poll = Poll.new(poll_params)
     puts poll_params
     authorize @poll
@@ -37,6 +23,18 @@ class PollsController < ApplicationController
     end
   end
 
+  def show
+    render status: :ok, json: { poll: @poll.as_json(include: {
+        poll_options: {
+          only: [:option, :id, :vote]
+        }
+      })
+    }
+    # authorize @poll
+    # poll_options = @poll.poll_options
+    # poll_creator = User.find(@poll.creator_id).name
+    # render status: :ok, json: { poll: @poll, poll_options: poll_options, poll_creator: poll_creator }
+  end
 
   def update
     authorize @poll

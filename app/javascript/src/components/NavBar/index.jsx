@@ -34,7 +34,7 @@ const NavBar = () => {
                 <NavItem
                   name="Create"
                   iconClass="ri-add-fill"
-                  path="/polls/create"
+                  path="/polls/new"
                 />
               }
             </div>

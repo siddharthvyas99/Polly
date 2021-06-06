@@ -60,4 +60,7 @@ gem 'react-rails'
 
 gem "pundit"
 
+gem "sidekiq"
+
+
 
