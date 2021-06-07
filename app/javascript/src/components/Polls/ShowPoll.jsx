@@ -6,8 +6,10 @@ import Container from "components/Container";
 import Button from "components/Button";
 import PageLoader from "components/PageLoader";
 import pollsApi from "apis/polls";
+import votesApi from "apis/votes";
+import { getFromLocalStorage } from "helpers/storage";
 
-const Result = ({ options, selected }) => {
+const Result = ({ options, selected, votedAt }) => {
   const countVotes = () => {
     const count = Object.values(options).reduce(
       (count, { vote }) => count + vote,
@@ -41,6 +43,13 @@ const Result = ({ options, selected }) => {
         ))}
       </ul>
       <h2>Thanks for voting !!</h2>
+
+      <br />
+      <br />
+
+      <p className="text-sm font-regular leading-5 text-bb-gray-600 text-opacity-50">
+        Your vote was added on {votedAt}
+      </p>
     </>
   );
 };
@@ -51,7 +60,9 @@ const ShowPoll = () => {
   const [options, setOptions] = useState([]);
   const [selected, setSelected] = useState(-1);
   const [hasVoted, setHasVoted] = useState(false);
+  const [alreadyVoted, setAlreadyVoted] = useState("");
   const [pageLoading, setPageLoading] = useState(true);
+  const authUserId = getFromLocalStorage("authUserId");
 
   const fetchPollDetails = async () => {
     try {
@@ -59,6 +70,10 @@ const ShowPoll = () => {
       // logger.info(response);
       setTitle(response.data.poll.title);
       setOptions(response.data.poll.poll_options);
+
+      const voteResponse = await votesApi.show(`${id}?user_id=${authUserId}`);
+      setAlreadyVoted(voteResponse.data.votedFor[0]);
+
       setPageLoading(false);
     } catch (error) {
       logger.error(error);
@@ -82,6 +97,9 @@ const ShowPoll = () => {
       await pollsApi.update(id, {
         poll: { title, poll_options_attributes: options },
       });
+
+      await votesApi.create({ vote: { poll_id: id, user_id: authUserId } });
+
       setPageLoading(false);
     } catch (error) {
       logger.error(error);
@@ -102,7 +120,7 @@ const ShowPoll = () => {
       <h1 className="pb-3 pl-3 mt-3 mb-3 text-lg leading-5 text-gray-800 border-b border-gray-500">
         {title}
       </h1>
-      {!hasVoted && (
+      {!hasVoted && !alreadyVoted && (
         <>
           <ul className="mb-6 mt-3 px-6">
             {options.map(option => (
@@ -134,7 +152,17 @@ const ShowPoll = () => {
         </>
       )}
 
-      {hasVoted && <Result options={options} selected={selected} />}
+      {hasVoted && !alreadyVoted && (
+        <Result options={options} selected={selected} />
+      )}
+
+      {alreadyVoted && (
+        <Result
+          options={options}
+          selected="-1"
+          votedAt={alreadyVoted.created_at}
+        />
+      )}
     </Container>
   );
 };

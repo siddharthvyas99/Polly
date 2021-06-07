@@ -48,7 +48,7 @@ const NavBar = () => {
               {userName !== "null" && userName}
             </span>
           </div>
-          {!userName && (
+          {userName !== "null" && (
             <div className="flex items-center justify-end">
               <a
                 onClick={handleLogout}

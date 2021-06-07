@@ -2,8 +2,7 @@ class PollsController < ApplicationController
   before_action :authenticate_user_using_x_auth_token, except: [:index, :show]
   # before_action :authenticate_user_using_x_auth_token, except: [:index]
   before_action :load_poll, only: %i[show update destroy]
-
-
+  
   def index
     polls = Poll.all.order('created_at DESC')
     # polls = policy_scope(Poll)

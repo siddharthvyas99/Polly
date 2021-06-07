@@ -21,7 +21,7 @@ const TableRow = ({ data, destroyPoll, updatePoll, showPoll, isLoggedIn }) => {
           >
             {rowData.title}
           </td>
-          {isLoggedIn && authUserId === rowData.creator_id && (
+          {isLoggedIn && authUserId == rowData.creator_id && (
             <>
               <td style={{ width: "164px" }}></td>
               <td className="px-6 py-4 text-center cursor-pointer">
@@ -33,7 +33,7 @@ const TableRow = ({ data, destroyPoll, updatePoll, showPoll, isLoggedIn }) => {
               </td>
             </>
           )}
-          {isLoggedIn && authUserId === rowData.creator_id && (
+          {isLoggedIn && authUserId == rowData.creator_id && (
             <>
               <td style={{ width: "164px" }}></td>
               <td className="px-6 py-4 text-center cursor-pointer">
