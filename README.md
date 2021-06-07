@@ -11,7 +11,7 @@ Functional Requirements
 4. To vote in a poll, the user needs to signup. One user can only vote on one option of a poll.
 5. When one has voted in a poll, the user should be able to see the total votes and breakup for each poll option.
 
-Adding 
+6. * Showing results to users who have already voted in a poll. 
 
 Database Design
 
