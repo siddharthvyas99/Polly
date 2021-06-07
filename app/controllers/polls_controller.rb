@@ -36,14 +36,14 @@ class PollsController < ApplicationController
   end
 
   def update
-    authorize @poll
-    is_not_owner = @poll.creator_id != current_user.id
+    # authorize @poll
+    # is_not_owner = @poll.creator_id != current_user.id
 
-    if poll_params[:authorize_owner] && is_not_owner
-      render status: :forbidden, json: { error: t('authorization.denied') }
-    end
+    # if poll_params[:authorize_owner] && is_not_owner
+    #   render status: :forbidden, json: { error: t('authorization.denied') }
+    # end
 
-    if @poll.update(poll_params.except(:authorize_owner))
+    if @poll.update(poll_params) #@poll.update(poll_params.except(:authorize_owner))
       render status: :ok, json: {}
     else
       render status: :unprocessable_entity,
