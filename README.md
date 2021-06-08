@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/SiddharthVyas99/Polly/tree/main.svg?style=svg))](https://circleci.com/gh/SiddharthVyas99/Polly/tree/main)
+
 # POLLY
  Application Description - Simple poll application to allow authenticated users to vote in given polls on dashboard, create, edit and polls. Frontend build on react.js with backend on Rails. All CRUD operations supported on polls endpoint according to the set policies.
  
