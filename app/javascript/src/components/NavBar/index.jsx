@@ -48,7 +48,7 @@ const NavBar = () => {
               {userName !== "null" && userName}
             </span>
           </div>
-          {userName !== "null" && (
+          {userName !== "null" && userName ? (
             <div className="flex items-center justify-end">
               <a
                 onClick={handleLogout}
@@ -61,6 +61,8 @@ const NavBar = () => {
                 LogOut
               </a>
             </div>
+          ) : (
+            <NavItem name="Login" path="/login" />
           )}
         </div>
       </div>

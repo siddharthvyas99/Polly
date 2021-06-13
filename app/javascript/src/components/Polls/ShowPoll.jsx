@@ -8,6 +8,7 @@ import PageLoader from "components/PageLoader";
 import pollsApi from "apis/polls";
 import votesApi from "apis/votes";
 import { getFromLocalStorage } from "helpers/storage";
+import ProgressBar from "components/Polls/ProgressBar";
 
 const Result = ({ options, selected, votedAt }) => {
   const countVotes = () => {
@@ -28,17 +29,14 @@ const Result = ({ options, selected, votedAt }) => {
       <ul className="mb-6 mt-3 px-6 pointer-events-none">
         {options.map(option => (
           <li className="my-6 block w-full" key={option.id}>
-            <span
+            <ProgressBar
               className={classnames(
-                "border rounded-full p-3 w-3/4 inline-block cursor-pointer hover:bg-blue-300 hover:text-white",
+                "border rounded-full h-10 w-3/4 inline-block cursor-pointer hover:bg-blue-300 hover:text-white",
                 { "bg-blue-300 text-white": selected == option.id }
               )}
-            >
-              {option.option}
-            </span>
-            <span className="w-1/4 pl-4">
-              {getVoteCount(option.vote).toFixed(2)}%
-            </span>
+              completed={getVoteCount(option.vote).toFixed(2)}
+              option={option.option}
+            />
           </li>
         ))}
       </ul>
@@ -48,7 +46,7 @@ const Result = ({ options, selected, votedAt }) => {
       <br />
 
       <p className="text-sm font-regular leading-5 text-bb-gray-600 text-opacity-50">
-        Your vote was added on {votedAt}
+        Your vote was added on {new Date(votedAt).toString()}
       </p>
     </>
   );
