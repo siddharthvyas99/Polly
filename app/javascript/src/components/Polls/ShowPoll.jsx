@@ -32,7 +32,7 @@ const Result = ({ options, selected, votedAt }) => {
             <ProgressBar
               className={classnames(
                 "border rounded-full h-10 w-3/4 inline-block cursor-pointer hover:bg-blue-300 hover:text-white",
-                { "bg-blue-300 text-white": selected == option.id }
+                { "border-blue-500": selected == option.id }
               )}
               completed={getVoteCount(option.vote).toFixed(2)}
               option={option.option}
@@ -45,9 +45,11 @@ const Result = ({ options, selected, votedAt }) => {
       <br />
       <br />
 
-      <p className="text-sm font-regular leading-5 text-bb-gray-600 text-opacity-50">
-        Your vote was added on {new Date(votedAt).toString()}
-      </p>
+      {selected == -1 && (
+        <p className="text-sm font-regular leading-5 text-bb-gray-600 text-opacity-50">
+          Your vote was added on {new Date(votedAt).toString()}
+        </p>
+      )}
     </>
   );
 };
@@ -65,7 +67,6 @@ const ShowPoll = () => {
   const fetchPollDetails = async () => {
     try {
       const response = await pollsApi.show(id);
-      // logger.info(response);
       setTitle(response.data.poll.title);
       setOptions(response.data.poll.poll_options);
 
@@ -93,7 +94,7 @@ const ShowPoll = () => {
       });
       setHasVoted(true);
       await pollsApi.update(id, {
-        poll: { title, poll_options_attributes: options },
+        poll: { poll_options_attributes: options },
       });
 
       await votesApi.create({ vote: { poll_id: id, user_id: authUserId } });

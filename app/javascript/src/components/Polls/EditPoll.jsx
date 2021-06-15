@@ -11,7 +11,6 @@ import { getFromLocalStorage } from "helpers/storage";
 const EditPoll = ({ history }) => {
   const { id } = useParams();
   const [title, setTitle] = useState("");
-  const [creator_id, setCreatorId] = useState("");
   const [loading, setLoading] = useState(true);
   const [pageLoading, setPageLoading] = useState(true);
   const authToken = getFromLocalStorage("authToken");
@@ -26,9 +25,9 @@ const EditPoll = ({ history }) => {
   const fetchPollDetails = async () => {
     try {
       const response = await pollsApi.show(id);
-      setTitle(response.data.poll.title);
+      if (response.data.poll.creator_id == authUserId)
+        setTitle(response.data.poll.title);
       setOptions(response.data.poll.poll_options);
-      setCreatorId(response.data.poll.creator_id);
       setPageLoading(false);
     } catch (error) {
       logger.error(error);
@@ -54,10 +53,6 @@ const EditPoll = ({ history }) => {
       setLoading(false);
     }
   };
-
-  if (creator_id !== authUserId) {
-    history.push("/");
-  }
 
   if (pageLoading) {
     return <PageLoader />;

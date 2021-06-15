@@ -8,7 +8,6 @@ class VotePolicy
 
   def show?
     true
-    # poll.creator_id == user.id || poll.user_id == user.id
   end
 
   def edit?

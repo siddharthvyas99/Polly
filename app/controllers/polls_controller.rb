@@ -1,11 +1,9 @@
 class PollsController < ApplicationController
   before_action :authenticate_user_using_x_auth_token, except: [:index, :show]
-  # before_action :authenticate_user_using_x_auth_token, except: [:index]
   before_action :load_poll, only: %i[show update destroy]
   
   def index
-    polls = Poll.all.order('created_at DESC')
-    # polls = policy_scope(Poll)
+    polls = policy_scope(Poll).order('created_at DESC')
     render status: :ok, json: { polls: polls }
   end
   
@@ -29,21 +27,10 @@ class PollsController < ApplicationController
         }
       })
     }
-    # authorize @poll
-    # poll_options = @poll.poll_options
-    # poll_creator = User.find(@poll.creator_id).name
-    # render status: :ok, json: { poll: @poll, poll_options: poll_options, poll_creator: poll_creator }
   end
 
   def update
-    # authorize @poll
-    # is_not_owner = @poll.creator_id != current_user.id
-
-    # if poll_params[:authorize_owner] && is_not_owner
-    #   render status: :forbidden, json: { error: t('authorization.denied') }
-    # end
-
-    if @poll.update(poll_params) #@poll.update(poll_params.except(:authorize_owner))
+    if @poll.update(poll_update_params)
       render status: :ok, json: {}
     else
       render status: :unprocessable_entity,
@@ -69,7 +56,10 @@ class PollsController < ApplicationController
   end
 
   def poll_params
-    params.require(:poll).permit(:title, :poll_options_attributes => [:id, :option, :vote]).merge(creator_id: @current_user.id) #.merge(user_id: @current_user.id)
+    params.require(:poll).permit(:title, :poll_options_attributes => [:id, :option, :vote]).merge(creator_id: @current_user.id)
   end
 
+  def poll_update_params
+    params.require(:poll).permit(policy(@poll).permitted_attributes)
+  end
 end

@@ -3,14 +3,6 @@ import React from "react";
 const ProgressBar = props => {
   const { completed, className, option } = props;
 
-  const containerStyles = {
-    height: 20,
-    width: "100%",
-    backgroundColor: "#e0e0de",
-    borderRadius: 50,
-    margin: 50,
-  };
-
   const fillerStyles = {
     height: "100%",
     width: `${completed}%`,
@@ -43,7 +35,7 @@ const ProgressBar = props => {
         {
           <span>
             <span>{option}</span> &nbsp;
-            <span style={labelPercentStyles}>{completed}</span>
+            <span style={labelPercentStyles}>{`${completed}%`}</span>
           </span>
         }
       </div>

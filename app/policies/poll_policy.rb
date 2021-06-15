@@ -8,7 +8,6 @@ class PollPolicy
 
   def show?
     true
-    # poll.creator_id == user.id || poll.user_id == user.id
   end
 
   def edit?
@@ -25,5 +24,26 @@ class PollPolicy
 
   def destroy?
     poll.creator_id == user.id
+  end
+
+  def permitted_attributes
+    if poll.creator_id == user.id
+      [:title, :poll_options_attributes => [:id, :option, :vote]]
+    else
+      [:poll_options_attributes => [:id, :option, :vote]]
+    end
+  end
+
+  class Scope
+    attr_reader :user, :scope
+
+    def initialize(user, scope)
+      @user = user
+      @scope = scope
+    end
+
+    def resolve
+      scope.all
+    end
   end
 end

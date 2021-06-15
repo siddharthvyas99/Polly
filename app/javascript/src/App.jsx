@@ -24,11 +24,9 @@ const App = () => {
   const isLoggedIn = !either(isNil, isEmpty)(authToken) && authToken !== "null";
 
   useEffect(() => {
-    /*eslint no-undef: "off"*/
     initializeLogger();
     registerIntercepts();
     setAuthHeaders(setLoading);
-    logger.info("Log from js-logger");
   }, []);
 
   if (loading) {
