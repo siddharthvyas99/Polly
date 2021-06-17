@@ -1,0 +1,72 @@
+version: 2.1
+orbs:
+  ruby: circleci/ruby@0.1.2
+  node: circleci/node@2
+
+jobs:
+  build:
+    parallelism: 1
+
+    docker:
+      - image: circleci/ruby:2.7.2-node-browsers
+      - image: circleci/postgres:9.6
+        environment:
+          POSTGRES_HOST_AUTH_METHOD: trust
+
+    #application directory change it with your application directory name
+    working_directory: ~/polly
+    environment:
+      TZ: "/usr/share/zoneinfo/America/New_York"
+      RAILS_ENV: "test"
+      RACK_ENV: "test"
+
+    steps:
+      - checkout
+
+      - run: gem install bundler:2.1.4
+      #install sqlite dependency
+
+      - run: sudo apt update && sudo apt install zlib1g-dev libsqlite3-dev
+
+      # Bundle install
+
+      - run: bundle config set --local path 'vendor/bundle'
+      - run: bundle install --path vendor/bundle
+
+      # Setup database
+
+      - run: cp config/database.yml.ci config/database.yml
+      - run: bundle exec rake db:create db:schema:load --trace
+
+      # Yarn install
+      
+      - restore_cache:
+          name: Restore Yarn Package Cache
+          keys:
+            - yarn-packages-{{ checksum "yarn.lock" }}
+      - run:
+          name: Install Dependencies
+          command: yarn install --frozen-lockfile --cache-folder ~/.cache/yarn
+      - save_cache:
+          name: Save Yarn Package Cache
+          key: yarn-packages-{{ checksum "yarn.lock" }}
+          paths:
+            - ~/.cache/yarn
+
+      # - run: bin/yarn install --cache-folder ~/.cache/yarn
+
+      # Generate assets
+
+#       - run: bin/webpack
+      - run: bundle exec rails webpacker:compile
+
+      # Unit tests
+
+      - run:
+          shell: /bin/bash
+          command: bundle exec rake test --trace
+workflows:
+  version: 2
+  commit:
+    jobs:
+      - build
