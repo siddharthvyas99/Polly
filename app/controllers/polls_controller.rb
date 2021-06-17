@@ -9,7 +9,6 @@ class PollsController < ApplicationController
   
   def create
     @poll = Poll.new(poll_params)
-    puts poll_params
     authorize @poll
     if @poll.save
       render status: :ok,
